@@ -8,9 +8,13 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Жанр книги'
 
 class Language(models.Model):
     name = models.CharField(max_length=20, help_text='Введите язык книги', verbose_name='Язык книги')
+    def __str__(self):
+        return self.name
 
 
 class Author(models.Model):
@@ -42,6 +46,9 @@ class Book(models.Model):
         # возращает URL-адрес для доступа к определенному экземпляру книги
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_author(self):
+        return ', '.join([author.last_name for author in self.author.all()])
+    display_author.short_description = 'Авторы'
 
 class Status(models.Model):
     name = models.CharField(max_length=20, help_text='Введите статус экземпляра книги',
