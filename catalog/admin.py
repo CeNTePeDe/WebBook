@@ -13,7 +13,8 @@ class BooksInstanceInline(admin.TabularInline):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ['last_name', 'first_name']
+    list_display = ('last_name', 'first_name')
+    fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
@@ -24,4 +25,12 @@ class BookAdmin(admin.ModelAdmin):
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
     list_filter = ('book', 'status')
+    fieldsets = (
+        ('Экземпляр книги', {
+            'fields': ('book', 'imprint', 'inv_nom')
+        }),
+        ('Статус и окончание его действия', {
+            'fields': ('status', 'due_back')
+        }),
+    )
 
