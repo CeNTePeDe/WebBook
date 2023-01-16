@@ -1,0 +1,17 @@
+{% extends "catalog\base_page.html" %}
+
+{% block content %}
+    <h1>  Список книг в БД </h1>
+    {% if book_list %}
+    <table width="45%" cellpadding="2">
+        {% for book in book_list %}
+        <tr>
+            <th><a href="book.get_absolute_url">{{ book.title }}</a></th>
+            <th>{{ book.genre }}</th>
+        </tr>
+        {% endfor %}
+       {% else %}
+        <p> В базе данных нег книг </p>
+    {% endif %}
+    </table>
+{% endblock %}

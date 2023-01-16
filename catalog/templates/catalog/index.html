@@ -1,0 +1,13 @@
+{% extends "catalog\base_page.html" %}
+{% block content %}
+<h1>Главная страница</h1>
+    <p> Добро пожаловать в <em>Мир книг</em>. Это очень простой сайт разработанный на Django</p>
+<h2>Контент страницы</h2>
+    <p> База данных сайта Мир книг содержит следующие записи: </p>
+    <ul>
+        <li><strong>Колличество книг:</strong>{{num_books}}</li>
+        <li><strong>Колличество экземпляров книг:</strong>{{num_instances}}</li>
+        <li><strong>Колличество экземпляров книг в заказе:</strong>{{num_instances_available}}</li>
+        <li><strong>Колличество авторов книг:</strong>{{num_authors}}</li>
+    </ul>
+{% endblock %}
