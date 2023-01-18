@@ -17,17 +17,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.urls import re_path
 from django.conf.urls import url
-from catalog.views import index, BookListView, BookDetailView, AuthorListView
+from catalog.views import index, BookListView, BookDetailView, AuthorListView, LoanedBookByUserListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     re_path(r'^books/$', BookListView.as_view(), name='books'),
-    url(r'^book/(?P<pk>\d+)/$', BookDetailView.as_view(), name='book-detail'),
-    # path('book/<int:bookid>/', BookDetailView.as_view(), name='book-detail'),
+    re_path(r'^book/(?P<pk>\d+)/$', BookDetailView.as_view(), name='book-detail'),
+    #path('books/book/<int:id>/', BookDetailView.as_view(), name='book-detail'),
     re_path(r'^authors/$', AuthorListView.as_view(), name='authors'),
 ]
 
 urlpatterns += [
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    url(r'^mybooks/$', LoanedBookByUserListView.as_view(), name='my-borrowed')
 ]
