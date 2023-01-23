@@ -20,6 +20,7 @@ class AuthorAdmin(admin.ModelAdmin):
 class BookAdmin(admin.ModelAdmin):
     list_display = ['title', 'genre', 'language', 'display_author']
     list_filter = ['genre', 'author']
+    search_fields = ['title']
     inlines = [BooksInstanceInline]
 
 @admin.register(BookInstance)
