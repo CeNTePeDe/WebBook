@@ -6,7 +6,7 @@
     <table width="45%" cellpadding="2">
         {% for book in book_list %}
         <tr>
-            <th><a href="book.get_absolute_url">{{ book.title }}</a></th>
+            <th><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></th>
             <th>{{ book.genre }}</th>
         </tr>
         {% endfor %}

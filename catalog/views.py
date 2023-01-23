@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
-    num_instances_available = BookInstance.objects.filter(status__exact='2').count()
+    num_instances_available = BookInstance.objects.filter(status__exact='5').count()
     num_authors = Author.objects.count()
     # добавим сессии
     num_visits = request.session.get('num_visits', 0)
@@ -28,7 +28,7 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
-    # template_name = 'catalog/book_detail.html'
+    template_name = 'catalog/book_detail.html'
 
 
 class AuthorListView(generic.ListView):
@@ -49,7 +49,7 @@ class LoanedBookByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return not BookInstance.objects.filter(
-            borrower=self.request.user).filter(status__exact='2').order_by('due_back')
+            borrower=self.request.user).filter(status__exact='5').order_by('due_back')
 
 
 
