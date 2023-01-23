@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 
 
@@ -62,9 +62,9 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         # возращает URL-адрес для доступа к определенному экземпляру книги
-       # return reverse('book-detail', args=[str(self.id)])
-        return reverse('book-detail', args={'id': self.id})
-        #return "book/%s/" % self.pk
+        return reverse('book-detail', kwargs={'book_pk': self.pk})
+
+
 
     def display_author(self):
         return ', '.join([author.last_name for author in self.author.all()])
