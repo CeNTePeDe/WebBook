@@ -19,19 +19,20 @@ from django.urls import re_path
 from django.conf.urls import url
 
 from catalog.models import Book
-from catalog.views import index, BookListView, BookDetailView, AuthorListView, LoanedBookByUserListView
+from catalog.views import index, BookListView, BookDetailView, AuthorListView, LoanedBookByUserListView, authors_add
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     re_path(r'^books/$', BookListView.as_view(), name='books'),
-    #url(r'^book/(?P<bookid>\d+)/$', BookDetailView.as_view(), name='book-detail'),
     path('book/<int:book_pk>/', BookDetailView.as_view(), name='book-detail'),
     re_path(r'^authors/$', AuthorListView.as_view(), name='authors'),
-    re_path(r'^mybooks/$', LoanedBookByUserListView.as_view(), name='my-borrowed')
+
+    re_path(r'^mybooks/$', LoanedBookByUserListView.as_view(), name='my-borrowed'),
+    path('author_add/', authors_add, name='authors_add' ),
 ]
 
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
-
+    url(r'^mybooks/$', LoanedBookByUserListView.as_view(), name='my-borrowed'),
 ]
