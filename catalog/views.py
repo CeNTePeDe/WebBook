@@ -1,7 +1,10 @@
-from django.shortcuts import render
-from .models import Book, Author, BookInstance, Genre
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import AuthorForm
+from .models import Book, Author, BookInstance, Genre
 
 
 def index(request):
@@ -29,6 +32,7 @@ class BookListView(generic.ListView):
 class BookDetailView(generic.DetailView):
     model = Book
     template_name = 'catalog/book_detail.html'
+    pk_url_kwarg = 'book_pk'
 
 
 class AuthorListView(generic.ListView):
@@ -51,5 +55,32 @@ class LoanedBookByUserListView(LoginRequiredMixin, generic.ListView):
         return not BookInstance.objects.filter(
             borrower=self.request.user).filter(status__exact='5').order_by('due_back')
 
+
+def authors_add(request):
+    author = Author.objects.all()
+    authors_form = AuthorForm()
+    context = {
+        'form': authors_form,
+        'author': author
+    }
+    return render(request, 'catalog/authors_add.html', context)
+
+def create(request):
+    if request.method=='POST':
+        author = Author()
+        author.first_name = request.POST.get('first_name')
+        author.last_name = request.POST.get('last_name')
+        author.date_of_birth = request.POST.get('date_of_birth')
+        author.date_of_death = request.POST.get('date_of_death')
+        author.save()
+        return HttpResponseRedirect('/authors_add/')
+
+def delete(request, id):
+    try:
+        author = Author.objects.get(id=id)
+        author.delete()
+        return HttpResponseRedirect('/authors_add/')
+    except Author.DoesNotExist:
+        return HttpResponseRedirect('<h1>Автор не найден</h2>')
 
 
