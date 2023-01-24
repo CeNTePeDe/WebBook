@@ -62,7 +62,7 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         # возращает URL-адрес для доступа к определенному экземпляру книги
-        return reverse('book-detail', kwargs={'book_pk': self.pk})
+        return reverse('book-detail', kwargs={'book_pk': self.id})
 
 
 
