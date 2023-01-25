@@ -2,13 +2,29 @@
 
 {% block content %}
     <h1>Саписок авторов в БД</h1>
-    {% if author_list %}
+
+        <table style="width: 600px;">
+            <thead>
+            <tr>
+                <td><b>Имя</b></td>
+                <td><b>Фамилия</b></td>
+                <td><b>Дата рождения</b></td>
+                <td><b>Дата смерти</b></td>
+            </tr>
+            </thead>
+
+        {% if author_list %}
         {% for author in author_list.all %}
-            <p> {{author.first_name}} {{author.last_name}},
-                <strong> Родился </strong> {{ author.date_of_birth }},
-                <strong>Умер</strong> {{ author.date_of_death }}</p>
+            <tr>
+                <td>{{ author.first_name }}</td>
+                <td>{{ author.last_name }}</td>
+                <td>{{ author.date_of_birth }}</td>
+                <td>{{ author.date_of_death }}</td>
+            </tr>
+
         {% endfor %}
-    {% else %}
-        <p> В базе данных нет авторов </p>
-    {% endif %}
+        {% else %}
+            <p> В базе данных нет авторов </p>
+        {% endif %}
+        </table>
 {% endblock %}

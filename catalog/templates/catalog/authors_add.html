@@ -1,18 +1,24 @@
 {% extends "catalog\base_page.html" %}
 
 {% block content %}
-<h3> Список авторов БД</h3>
-<table>
-    <thead><th>ID</th><th>----Имя----</th>
-    <th>Фамилия</th><th></th></thead>
+<h3><b>Список авторов БД</b></h3>
+<table  style="width: 600px;">
+    <thead style="b">
+    <tr>
+        <td><b>ID</b></td>
+        <td><b>Имя</b></td>
+        <td><b>Фамилия</b></td>
+    </tr>
+    </thead>
+
     {% if author %}
     {% for author in author.all %}
     <tr>
         <td>{{ author.id }}</td>
         <td>{{ author.first_name }}</td>
         <td>{{ author.last_name }}</td>
-        <td><a href="/edit1/{{author.id}}">Изменить</a>,
-        <a href="/delete/{{author.id}}">Удалить</a></td>
+        <td><a href="/edit1/{{author.id}}">Изменить</a></td>
+        <td><a href="/delete/{{author.id}}">Удалить</a></td>
     </tr>
     {% endfor %}
     {% else %}
