@@ -1,7 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .forms import AuthorForm
 from .models import Book, Author, BookInstance, Genre
@@ -81,6 +83,35 @@ def delete(request, id):
         author.delete()
         return HttpResponseRedirect('/authors_add/')
     except Author.DoesNotExist:
-        return HttpResponseRedirect('<h1>Автор не найден</h2>')
+        return HttpResponseRedirect('<h1>Автор не найден</h1>')
+
+
+def edit1(request, id):
+    author = Author.objects.get(id=id)
+    if request.method=='POST':
+        author = Author()
+        author.first_name = request.POST.get('first_name')
+        author.last_name = request.POST.get('last_name')
+        author.date_of_birth = request.POST.get('date_of_birth')
+        author.date_of_death = request.POST.get('date_of_death')
+        author.save()
+        return HttpResponseRedirect('/authors_add/')
+    else:
+        return render(request,'catalog/edit1.html', {'author':  author} )
+
+
+class BookCreate(CreateView):
+    model = Book
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+
+class BookUpdate(UpdateView):
+    model = Book
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+
+class BookDelete(DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
 
 
