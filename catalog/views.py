@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -10,7 +11,11 @@ from .models import Book, Author, BookInstance, Genre
 
 
 def index(request):
-    num_books = Book.objects.all().count()
+    num_books = cache.get('num_books')
+    if not num_books:
+        num_books = Book.objects.all().count()
+        cache.set('num_books', num_books, 60)
+
     num_instances = BookInstance.objects.all().count()
     num_instances_available = BookInstance.objects.filter(status__exact='5').count()
     num_authors = Author.objects.count()
@@ -51,11 +56,12 @@ class LoanedBookByUserListView(LoginRequiredMixin, generic.ListView):
     находящихся в заказеу текущего пользователя'''
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
-    paginate_by = 10
+
+    # paginate_by = 10
 
     def get_queryset(self):
         return not BookInstance.objects.filter(
-            borrower=self.request.user).filter(status__exact='5').order_by('due_back')
+            borrower=self.request.user).filter(status__exact='4').order_by('due_back')
 
 
 def authors_add(request):
@@ -67,8 +73,9 @@ def authors_add(request):
     }
     return render(request, 'catalog/authors_add.html', context)
 
+
 def create(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         author = Author()
         author.first_name = request.POST.get('first_name')
         author.last_name = request.POST.get('last_name')
@@ -76,6 +83,7 @@ def create(request):
         author.date_of_death = request.POST.get('date_of_death')
         author.save()
         return HttpResponseRedirect('/authors_add/')
+
 
 def delete(request, id):
     try:
@@ -88,7 +96,7 @@ def delete(request, id):
 
 def edit1(request, id):
     author = Author.objects.get(id=id)
-    if request.method=='POST':
+    if request.method == 'POST':
         author = Author()
         author.first_name = request.POST.get('first_name')
         author.last_name = request.POST.get('last_name')
@@ -97,7 +105,7 @@ def edit1(request, id):
         author.save()
         return HttpResponseRedirect('/authors_add/')
     else:
-        return render(request,'catalog/edit1.html', {'author':  author} )
+        return render(request, 'catalog/edit1.html', {'author': author})
 
 
 class BookCreate(CreateView):
@@ -105,13 +113,13 @@ class BookCreate(CreateView):
     fields = '__all__'
     success_url = reverse_lazy('books')
 
+
 class BookUpdate(UpdateView):
     model = Book
     fields = '__all__'
     success_url = reverse_lazy('books')
 
+
 class BookDelete(DeleteView):
     model = Book
     success_url = reverse_lazy('books')
-
-
