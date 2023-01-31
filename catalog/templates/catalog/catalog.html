@@ -2,16 +2,29 @@
 
 {% block content %}
     <h1>  Список книг в БД </h1>
-    {% if book_list %}
-    <table width="45%" cellpadding="2">
-        {% for book in book_list %}
+
+     <table style="width: 600px;">
+
+         <thead>
+            <tr>
+                <td><b>Название книги</b></td>
+                <td><b>Жанр</b></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        {% if book_list %}
+         {% for book in book_list %}
         <tr>
-            <th><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></th>
-            <th>{{ book.genre }}</th>
+            <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+            <td>{{ book.genre }}</td>
+            <td><a href="/book/update/{{book.id}}">Изменить</a></td>
+            <td><a href="/book/delete/{{book.id}}">Удалить</a></td>
+
         </tr>
         {% endfor %}
        {% else %}
         <p> В базе данных нет книг </p>
     {% endif %}
-    </table>
+     </table>
 {% endblock %}

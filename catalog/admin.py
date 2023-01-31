@@ -8,8 +8,12 @@ admin.site.register(Language)
 admin.site.register(Status)
 #admin.site.register(BookInstance)
 
+
+
+
 class BooksInstanceInline(admin.TabularInline):
     model = BookInstance
+
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
