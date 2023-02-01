@@ -1,12 +1,12 @@
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 
-from .forms import AuthorForm
+from .forms import AuthorForm, ContactForm
 from .models import Book, Author, BookInstance, Genre
 
 
@@ -123,3 +123,13 @@ class BookUpdate(UpdateView):
 class BookDelete(DeleteView):
     model = Book
     success_url = reverse_lazy('books')
+
+
+class ContactFormView(FormView):
+    form_class = ContactForm
+    template_name = 'catalog/contact.html'
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return redirect('index')
