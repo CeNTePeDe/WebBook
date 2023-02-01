@@ -37,8 +37,8 @@ urlpatterns = [
 
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
-    # url(r'^mybooks/$', LoanedBookByUserListView.as_view(), name='my-borrowed'),
-]
+    path('captcha/', include('captcha.urls')),
+    ]
 
 if settings.DEBUG:
     import debug_toolbar
